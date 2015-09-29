@@ -1,43 +1,159 @@
 //
-// Created by Jesse on 9/28/2015.
+// Created by Jesse on 9/24/2015.
 //
 
 #include <iostream>
 #include <iomanip>
 #include <string>
-#include <c++/bits/stl_vector.h>
-#include <c++/bits/random.h>
-#include <c++/chrono>
-#include "hw28.h"
+#include <vector>
+#include <random>
+#include <chrono>
+#include <ctime>
 
 using namespace std;
 
-
-using
-
 class permutation {
+public:
 
-    void permutationOne(int n) {
-        vector<int> array;
+    vector<int> permu;
 
+
+
+    void permutationOne(int min, int max) {
+        int r = randomGen(max);
+//        cout << r << endl;
+//        cout << permu.size() << endl;
+        if (permu.size() == max) {
+//            cout << "Finished" << endl;
+//            for(int x : permu ) {
+//                cout << x << endl;
+//            }
+            permu.clear();
+//            cout << permu.size() << endl;
+            return;
+        }
+        else {
+            if (permu.size() == 0) {
+                permu.push_back(r);
+                permutationOne(min, max);
+            }
+            else {
+                bool flag = false;
+                for (int i: permu) {
+                    if (i == r) {
+                        flag = true;
+                    }
+                }
+                if(flag){
+                    permutationOne(min, max);
+                }
+                else {
+                    permu.push_back(r);
+                    permutationOne(min, max);
+                }
+
+            }
+        }
     }
 
-    void permutationTwo(int n) {
-        vector<int> array;
+//    void permutationTwo(int min, int max) {
+//        int r = randomGen(max);//
+//        if (permu.size() == max) {
+//            cout << "Finished" << endl;
+//            for(int x : permu ) {
+//                cout << x << endl;
+//            }
+//            permu.clear();
+//            used.clear();
+//            return;
+//        }
+//        else {
+//            if (permu.size() == 0) {
+//                permu.push_back(r);
+////                cout << used[r] << endl;
+//                used[r] = true;
+////                cout << used[r] << endl;
+//                permutationOne(min, max);
+//            }
+//            else {
+//                cout << used.at(r) << endl;
+//                if(used[r])
+//                    permutationOne(min, max);
+//
+//                else {
+//                    permu.push_back(r);
+//                    cout << used.at(r) << endl;
+//                    used.at(r) = true;
+//                    cout << used.at(r) << endl;
+//                    permutationOne(min, max);
+//                }
+//
+//            }
+//        }
+//    }
+
+    void permutationTwo(int min, int max) {
+        vector<bool> used (max, false);
+//        for(int x : used ) {
+//            cout << x << endl;
+//        }
+        int r = randomGen(max);
+        if (permu.size() == max) {
+            cout << "Finished" << endl;
+            for(int x : permu ) {
+                cout << x << endl;
+            }
+            permu.clear();
+            used.clear();
+            return;
+        }
+        else {
+            if (permu.size() == 0) {
+                permu.push_back(r);
+//                cout << used[r] << endl;
+                used[r] = true;
+//                cout << used[r] << endl;
+                permutationOne(min, max);
+            }
+            else {
+                cout << used.at(r) << endl;
+                if(used[r])
+                    permutationOne(min, max);
+
+                else {
+                    permu.push_back(r);
+                    cout << used.at(r) << endl;
+                    used.at(r) = true;
+                    cout << used.at(r) << endl;
+                    permutationOne(min, max);
+                }
+
+            }
+        }
     }
 
-    void permutationThree(int n) {
+
+    vector<int> permutationThree(int n) {
         vector<int> array = {1, n};
     }
 
-    int randomGen() {
-        random_device rd; /* source of randomness */
-        /* uniform distribution of integers between 10-39 */
-        uniform_int_distribution<int> uni (10, 40);
+    void setSeed() {
+        srand(time(0));
+    }
 
-        for (int k = 0; k < 16; k++) {
-            cout << "Random #" << (k+1) << " is " << uni(rd) << endl;
-        }
+    int randomGen(int n) {
+//        std::mt19937 rn;
+//        rn.seed(std::random_device()());
+//        std::uniform_int_distribution<std::mt19937::result_type> uni(1,6);
+//        return uni(rn);
+        return 0 + (rand()%n);
+//        random_device rd;
+//        uniform_int_distribution<int> uni (0, n);
+//        int r = uni(rd);
+//        return r;
+//        for (int k = 0; k < 16; k++) {
+//            cout << "Random #" << (k+1) << " is " << uni(rd) << endl;
+//        }
     }
 
     long fibonacci(unsigned n)
@@ -49,10 +165,10 @@ class permutation {
     int runTime () {
         chrono::time_point<chrono::system_clock> start, end;
         start = chrono::system_clock::now();
-        cout << fibonacci(42) << endl;
-        end = chrono::system_clock::now();
 
-        chrono::duration<double> elapse = end - start;
+        end = chrono::system_clock::now();
+        auto diff = end - start;
+        auto elapse = chrono::duration_cast<chrono::seconds>(diff);
         cout << "Elapse time is " << elapse.count() << endl;
         return 0;
     }
