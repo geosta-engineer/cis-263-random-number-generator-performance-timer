@@ -48,13 +48,12 @@ using namespace std;
 //            }
 //        }
 //    }
-
-int randomGen(int n) {
-//        std::mt19937 rn;
-//        rn.seed(std::random_device()());
-//        std::uniform_int_distribution<std::mt19937::result_type> uni(1,6);
-//        return uni(rn);
-    return 0 + (rand() % n);
+unsigned long randomGen(unsigned long n) {
+        std::mt19937 rn;
+        rn.seed(std::random_device()());
+        std::uniform_int_distribution<unsigned long> uni(0,n-1);
+        return uni(rn);
+//    return 0 + (rand() % n);
 //        random_device rd;
 //        uniform_int_distribution<int> uni (0, n);
 //        int r = uni(rd);
@@ -101,32 +100,73 @@ void permutationOne(int min, int max) {
 //      cout << permu.size() << endl;
 }
 
-void permutationTwo(int min, int max) {
-    vector<int> permu;
+
+void permutationTwo(int min, unsigned long max) {
+    vector<unsigned long> permu;
     vector<bool> used(max, false);
+//    unsigned long r = randomGen(max);
+
+    std::mt19937 rn;
+    rn.seed(std::random_device()());
+    std::uniform_int_distribution<unsigned long> uni(0,max-1);
+    unsigned long r =  uni(rn);
+    permu.push_back(r);
+    used.at(r) = true;
     while (permu.size() < max) {
-        int r = randomGen(max);
-        if (permu.size() == 0) {
-            permu.push_back(r);
-            used[r] = true;
-        }
-        else {
+//        unsigned long r = randomGen(max);
+        unsigned long r =  uni(rn);
+//        if (permu.size() == 0) {
+//            permu.push_back(r);
+//            used[r] = true;
+//        }
+//        else {
             if (!used.at(r)) {
                 permu.push_back(r);
                 used[r] = true;
             }
-        }
-    }
-//        cout << "Finished" << endl;
-//        for (int x : permu) {
-//            cout << x << endl;
 //        }
-//        permu.clear();
+    }
+        cout << "Finished" << endl;
+        for (int x : permu) {
+            cout << x << endl;
+        }
+        permu.clear();
 }
 
-vector<int> permutationThree(int n) {
-    vector<int> array = {1, n};
+void permutationThree(int min, int n){         //fills vector
+    //random_device rd; //source of randomness
+//    srand(time(0));
+    vector<int> vector1;
+    for(int i=1; i<=n; i++){
+        vector1.push_back(i);
+    }
+
+//    cout << "vector 1 contains:";           //prints vector
+    for(int i=0; i<vector1.size(); i++){
+//        cout << ' ' << vector1[i];
+    }
+
+//    cout << endl;
+
+    for(int i=1; i<n; ++i){                 //creates random permutation
+        //uniform_int_distribution<int> uni (0,i);
+
+        swap(vector1[i], vector1[randomGen(i)]);
+    }
+
+//    cout << "vector 1 contains:";           //prints vector
+    for(int i=0; i<vector1.size(); i++){
+//        cout << ' ' << vector1[i];
+    }
+
+
 }
+
+//int randInt(int n){
+//    return (rand()%n);
+//}
+
+
 
 void setSeed() {
     srand(time(0));
@@ -149,7 +189,7 @@ int main() {
 
     chrono::time_point<chrono::system_clock> start, end;
     start = chrono::system_clock::now();
-    permutationTwo(0, 1000);
+    permutationTwo(0, 32769);
     end = chrono::system_clock::now();
     auto diff = end - start;
     auto elapse = chrono::duration_cast<chrono::nanoseconds>(diff);
